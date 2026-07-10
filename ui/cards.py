@@ -12,27 +12,46 @@ def kpi_card(title, value, subtitle="", icon="📊", accent="#2563EB"):
         padding:20px;
         height:160px;
         box-shadow:0 4px 10px rgba(0,0,0,0.25);
+        font-family:sans-serif;
     ">
-        <div style="font-size:15px;color:#CBD5E1;font-weight:600;">
+
+        <div style="
+            font-size:15px;
+            color:#CBD5E1;
+            font-weight:600;
+        ">
             {icon} {title}
         </div>
 
-        <div style="font-size:34px;font-weight:700;color:white;margin-top:15px;">
+
+        <div style="
+            font-size:34px;
+            font-weight:700;
+            color:#FFFFFF;
+            margin-top:15px;
+        ">
             {value}
         </div>
 
-        <div style="font-size:13px;color:#94A3B8;margin-top:18px;">
+
+        <div style="
+            font-size:13px;
+            color:#94A3B8;
+            margin-top:18px;
+        ">
             {subtitle}
         </div>
+
     </div>
     """
 
-    st.markdown(html, unsafe_allow_html=True)
+    st.html(html)
 
 
 def render_kpis(kpis):
 
     c1, c2, c3, c4, c5, c6 = st.columns(6)
+
 
     with c1:
         kpi_card(
@@ -43,6 +62,7 @@ def render_kpis(kpis):
             "#2563EB",
         )
 
+
     with c2:
         kpi_card(
             "Paid",
@@ -51,6 +71,7 @@ def render_kpis(kpis):
             "✅",
             "#22C55E",
         )
+
 
     with c3:
         kpi_card(
@@ -61,6 +82,7 @@ def render_kpis(kpis):
             "#F59E0B",
         )
 
+
     with c4:
         kpi_card(
             "Customers",
@@ -70,6 +92,7 @@ def render_kpis(kpis):
             "#8B5CF6",
         )
 
+
     with c5:
         kpi_card(
             "Invoices",
@@ -78,6 +101,7 @@ def render_kpis(kpis):
             "📄",
             "#0EA5E9",
         )
+
 
     with c6:
         kpi_card(
