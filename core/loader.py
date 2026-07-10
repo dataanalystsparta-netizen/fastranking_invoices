@@ -1,4 +1,3 @@
-
 """
 Loads and validates the invoice Excel file.
 """
