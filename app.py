@@ -246,3 +246,132 @@ if search:
         df["Customer Name"]
         .str.contains(search, case=False, na=False)
     ]
+
+# ==========================================================
+# BUSINESS SUMMARY
+# ==========================================================
+
+st.write("")
+st.subheader("🏢 Business Summary")
+
+summary = (
+    df.groupby("Customer Name", dropna=False)
+      .agg(
+          Invoices=("Invoice Number", "count"),
+          Total_Invoice=("Total", "sum"),
+          Paid=("Paid Amount", "sum"),
+          Due=("Balance", "sum")
+      )
+      .reset_index()
+)
+
+summary = summary.sort_values(
+    by="Due",
+    ascending=False
+)
+
+if summary.empty:
+
+    st.warning("No matching businesses found.")
+
+else:
+
+    for _, row in summary.iterrows():
+
+        customer = row["Customer Name"]
+
+        customer_df = (
+            df[df["Customer Name"] == customer]
+            .sort_values(
+                by="Invoice Date",
+                ascending=False
+            )
+        )
+
+        due = row["Due"]
+
+        if due <= 0:
+            due_text = "✅ Fully Paid"
+        else:
+            due_text = f"Outstanding: {pounds(due)}"
+
+        expander_title = (
+            f"{customer} | "
+            f"{due_text} | "
+            f"{int(row['Invoices'])} invoice(s)"
+        )
+
+        with st.expander(expander_title):
+
+            c1, c2, c3 = st.columns(3)
+
+            with c1:
+                st.metric(
+                    "Total Invoice",
+                    pounds(row["Total_Invoice"])
+                )
+
+            with c2:
+                st.metric(
+                    "Paid",
+                    pounds(row["Paid"])
+                )
+
+            with c3:
+                st.metric(
+                    "Outstanding",
+                    pounds(row["Due"])
+                )
+
+            display_df = customer_df.copy()
+
+            display_df["Invoice Date"] = (
+                display_df["Invoice Date"]
+                .dt.strftime("%d/%m/%Y")
+                .fillna("")
+            )
+
+            display_df["Due Date"] = (
+                display_df["Due Date"]
+                .dt.strftime("%d/%m/%Y")
+                .fillna("")
+            )
+
+            display_df["Status"] = (
+                display_df["Invoice Status"]
+            )
+
+            display_df = display_df[
+                [
+                    "Invoice Number",
+                    "Invoice Date",
+                    "Due Date",
+                    "Total",
+                    "Balance",
+                    "Status"
+                ]
+            ]
+
+            display_df = display_df.rename(
+                columns={
+                    "Total": "Invoice Total",
+                    "Balance": "Outstanding"
+                }
+            )
+
+            display_df["Invoice Total"] = (
+                display_df["Invoice Total"]
+                .map(pounds)
+            )
+
+            display_df["Outstanding"] = (
+                display_df["Outstanding"]
+                .map(pounds)
+            )
+
+            st.dataframe(
+                display_df,
+                use_container_width=True,
+                hide_index=True
+            )
+
