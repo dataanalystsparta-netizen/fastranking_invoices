@@ -1,81 +1,49 @@
-
-"""
-Premium KPI cards.
-"""
-
 import streamlit as st
-
 from core.utils import format_currency
 
 
-# ==========================================================
-# SINGLE KPI CARD
-# ==========================================================
-
 def kpi_card(title, value, subtitle="", icon="📊", accent="#2563EB"):
 
-    st.markdown(
-        f"""
-        <div style="
-            background:#1E293B;
-            border-left:6px solid {accent};
-            border-radius:14px;
-            padding:18px;
-            box-shadow:0 8px 20px rgba(0,0,0,.18);
-            min-height:140px;
-        ">
-
-            <div style="
-                font-size:15px;
-                color:#CBD5E1;
-                font-weight:600;
-            ">
-                {icon} {title}
-            </div>
-
-            <div style="
-                font-size:32px;
-                font-weight:700;
-                color:white;
-                margin-top:12px;
-            ">
-                {value}
-            </div>
-
-            <div style="
-                color:#94A3B8;
-                margin-top:10px;
-                font-size:13px;
-            ">
-                {subtitle}
-            </div>
-
+    html = f"""
+    <div style="
+        background:#1E293B;
+        border-left:6px solid {accent};
+        border-radius:12px;
+        padding:20px;
+        height:160px;
+        box-shadow:0 4px 10px rgba(0,0,0,0.25);
+    ">
+        <div style="font-size:15px;color:#CBD5E1;font-weight:600;">
+            {icon} {title}
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
+        <div style="font-size:34px;font-weight:700;color:white;margin-top:15px;">
+            {value}
+        </div>
 
-# ==========================================================
-# KPI ROW
-# ==========================================================
+        <div style="font-size:13px;color:#94A3B8;margin-top:18px;">
+            {subtitle}
+        </div>
+    </div>
+    """
+
+    st.markdown(html, unsafe_allow_html=True)
+
 
 def render_kpis(kpis):
 
     c1, c2, c3, c4, c5, c6 = st.columns(6)
 
     with c1:
-
         kpi_card(
             "Total Invoiced",
             format_currency(kpis["total_invoice"]),
-            f"{kpis['invoices']:,} invoices",
+            f'{kpis["invoices"]:,} invoices',
             "💷",
             "#2563EB",
         )
 
     with c2:
-
         kpi_card(
             "Paid",
             format_currency(kpis["total_paid"]),
@@ -85,7 +53,6 @@ def render_kpis(kpis):
         )
 
     with c3:
-
         kpi_card(
             "Outstanding",
             format_currency(kpis["total_due"]),
@@ -95,31 +62,28 @@ def render_kpis(kpis):
         )
 
     with c4:
-
         kpi_card(
             "Customers",
-            f"{kpis['customers']:,}",
-            "Active customers",
+            f'{kpis["customers"]:,}',
+            "Active Customers",
             "🏢",
             "#8B5CF6",
         )
 
     with c5:
-
         kpi_card(
             "Invoices",
-            f"{kpis['invoices']:,}",
-            "Total invoices",
+            f'{kpis["invoices"]:,}',
+            "Total Invoices",
             "📄",
             "#0EA5E9",
         )
 
     with c6:
-
         kpi_card(
             "Overdue",
-            f"{kpis['overdue']:,}",
-            "Require attention",
+            f'{kpis["overdue"]:,}',
+            "Require Attention",
             "🚨",
             "#EF4444",
         )
