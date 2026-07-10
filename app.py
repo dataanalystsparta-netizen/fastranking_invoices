@@ -165,6 +165,26 @@ if uploaded_file is None:
 df = load_excel(uploaded_file)
 
 # ==========================================================
+# SIDEBAR FILTERS
+# ==========================================================
+
+st.sidebar.title("Filters")
+
+status_options = ["All"] + sorted(
+    df["Invoice Status"].dropna().unique().tolist()
+)
+
+selected_status = st.sidebar.selectbox(
+    "Invoice Status",
+    status_options
+)
+
+if selected_status != "All":
+    df = df[df["Invoice Status"] == selected_status]
+
+
+
+# ==========================================================
 # KPI CALCULATIONS
 # ==========================================================
 
@@ -230,6 +250,37 @@ with c5:
     """, unsafe_allow_html=True)
 
 st.write("")
+
+# ==========================================================
+# CHARTS
+# ==========================================================
+
+left_chart, right_chart = st.columns(2)
+
+with left_chart:
+
+    st.subheader("💰 Paid vs Outstanding")
+
+    chart_df = pd.DataFrame({
+        "Amount": [total_paid, total_due]
+    }, index=["Paid", "Outstanding"])
+
+    st.bar_chart(chart_df)
+
+with right_chart:
+
+    st.subheader("🏆 Top Customers by Outstanding")
+
+    top_due = (
+        df.groupby("Customer Name")["Balance"]
+        .sum()
+        .sort_values(ascending=False)
+        .head(10)
+    )
+
+    st.bar_chart(top_due)
+
+st.divider()
 
 # ==========================================================
 # SEARCH
@@ -337,10 +388,11 @@ else:
                 .fillna("")
             )
 
-            display_df["Status"] = (
-                display_df["Invoice Status"]
-            )
-
+            display_df["Status"] = display_df["Invoice Status"].replace({
+                "Closed": "🟢 Closed",
+                "Open": "🟠 Open",
+                "Overdue": "🔴 Overdue"
+            })
             display_df = display_df[
                 [
                     "Invoice Number",
@@ -374,4 +426,9 @@ else:
                 use_container_width=True,
                 hide_index=True
             )
+st.divider()
 
+st.caption(
+    f"Showing {len(df):,} invoices across "
+    f"{df['Customer Name'].nunique():,} customers."
+)
