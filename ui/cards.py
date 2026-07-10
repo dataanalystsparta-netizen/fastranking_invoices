@@ -50,7 +50,7 @@ def kpi_card(title, value, subtitle="", icon="📊", accent="#2563EB"):
 
 def render_kpis(kpis):
 
-    c1, c2, c3, c4, c5, c6 = st.columns(6)
+    c1, c2, c3, c4, c5, c6, c7, c8 = st.columns(6)
 
 
     with c1:
