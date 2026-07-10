@@ -15,36 +15,48 @@ def calculate_kpis(df):
 
     total_paid = df["Paid Amount"].sum()
 
-    total_due = df["Balance"].sum()
+    # Only Open + Overdue contribute to Outstanding
+    outstanding_df = df[
+        df["Invoice Status"].str.lower().isin(["open", "overdue"])
+    ]
+
+    total_due = outstanding_df["Balance"].sum()
 
     total_customers = df["Customer Name"].nunique()
 
     total_invoices = len(df)
 
-    overdue = len(
-        df[
-            df["Invoice Status"]
-            .str.lower()
-            == "overdue"
-        ]
+    overdue = (
+        df["Invoice Status"]
+        .str.lower()
+        .eq("overdue")
+        .sum()
+    )
+
+    draft = (
+        df["Invoice Status"]
+        .str.lower()
+        .eq("draft")
+        .sum()
+    )
+
+    void = (
+        df["Invoice Status"]
+        .str.lower()
+        .eq("void")
+        .sum()
     )
 
     return {
-
         "total_invoice": total_invoice,
-
         "total_paid": total_paid,
-
         "total_due": total_due,
-
         "customers": total_customers,
-
         "invoices": total_invoices,
-
-        "overdue": overdue
-
+        "overdue": overdue,
+        "draft": draft,
+        "void": void,
     }
-
 
 # ==========================================================
 # CUSTOMER SUMMARY
