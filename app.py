@@ -163,7 +163,37 @@ if uploaded_file is None:
 # ==========================================================
 
 df = load_excel(uploaded_file)
+# ==========================================================
+# DATE FILTERS
+# ==========================================================
 
+st.subheader("📅 Date Filters")
+
+col1, col2 = st.columns(2)
+
+min_date = df["Invoice Date"].min().date()
+max_date = df["Invoice Date"].max().date()
+
+with col1:
+    start_date = st.date_input(
+        "From",
+        value=min_date,
+        min_value=min_date,
+        max_value=max_date
+    )
+
+with col2:
+    end_date = st.date_input(
+        "To",
+        value=max_date,
+        min_value=min_date,
+        max_value=max_date
+    )
+
+df = df[
+    (df["Invoice Date"].dt.date >= start_date) &
+    (df["Invoice Date"].dt.date <= end_date)
+]
 # ==========================================================
 # SIDEBAR FILTERS
 # ==========================================================
