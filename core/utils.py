@@ -70,24 +70,35 @@ def percentage(part, total):
 # STATUS
 # ==========================================================
 
+# ==========================================================
+# STATUS
+# ==========================================================
+
 def status_icon(status):
 
     if pd.isna(status):
-        return "⚪ Unknown"
+        return ""
 
-    status = str(status).lower()
+    status = str(status).strip()
 
-    if status == "closed":
-        return "🟢 Closed"
+    status_lower = status.lower()
 
-    if status == "open":
-        return "🟠 Open"
+    icons = {
+        "closed": "🟢 Closed",
+        "open": "🟠 Open",
+        "overdue": "🔴 Overdue",
+        "draft": "🟠 Draft",
+        "void": "🟠 Void",
+        "sent": "🟢 Sent",
+        "paid": "🟢 Paid",
+    }
 
-    if status == "overdue":
-        return "🔴 Overdue"
+    # Return matching icon if known
+    if status_lower in icons:
+        return icons[status_lower]
 
-    return "⚪ Unknown"
-
+    # Otherwise return the original value instead of "Unknown"
+    return status
 
 # ==========================================================
 # DAYS OVERDUE
