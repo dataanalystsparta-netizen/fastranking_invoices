@@ -112,14 +112,14 @@ def render_kpis(kpis):
             "#EF4444",
         )
     with c7:
-    kpi_card(
-        "Draft",
-        f'{kpis["draft"]:,}',
-        "Draft invoices",
-        "📝",
-        "#64748B",
-    )
-
+        kpi_card(
+            "Draft",
+            f'{kpis["draft"]:,}',
+            "Draft invoices",
+            "📝",
+            "#64748B",
+        )
+    
     with c8:
         kpi_card(
             "Void",
