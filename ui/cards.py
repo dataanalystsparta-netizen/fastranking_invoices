@@ -45,7 +45,7 @@ def kpi_card(title, value, subtitle="", icon="📊", accent="#2563EB"):
     </div>
     """
 
-    st.html(html)
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def render_kpis(kpis):
@@ -110,4 +110,21 @@ def render_kpis(kpis):
             "Require Attention",
             "🚨",
             "#EF4444",
+        )
+    with c7:
+    kpi_card(
+        "Draft",
+        f'{kpis["draft"]:,}',
+        "Draft invoices",
+        "📝",
+        "#64748B",
+    )
+
+    with c8:
+        kpi_card(
+            "Void",
+            f'{kpis["void"]:,}',
+            "Void invoices",
+            "❌",
+            "#6B7280",
         )
