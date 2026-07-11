@@ -63,6 +63,27 @@ def clean_dataframe(df):
         )
 
     # -------------------------
+    # Remove duplicate invoices
+    # -------------------------
+
+    if "Invoice Number" in df.columns:
+
+        df["Invoice Number"] = (
+            df["Invoice Number"]
+            .fillna("")
+            .astype(str)
+            .str.strip()
+        )
+
+        df = (
+            df.drop_duplicates(
+                subset=["Invoice Number"],
+                keep="first"
+            )
+            .reset_index(drop=True)
+        )
+
+    # -------------------------
     # Convert numeric columns
     # -------------------------
 
