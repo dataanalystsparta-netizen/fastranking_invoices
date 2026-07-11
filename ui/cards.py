@@ -2,6 +2,10 @@ import streamlit as st
 from core.utils import format_currency
 
 
+# ==========================================================
+# SINGLE KPI CARD
+# ==========================================================
+
 def kpi_card(title, value, subtitle="", icon="📊", accent="#2563EB"):
 
     html = f"""
@@ -9,8 +13,8 @@ def kpi_card(title, value, subtitle="", icon="📊", accent="#2563EB"):
         background:#1E293B;
         border-left:6px solid {accent};
         border-radius:12px;
-        padding:20px;
-        height:160px;
+        padding:16px;
+        height:145px;
         box-shadow:0 4px 10px rgba(0,0,0,0.25);
         font-family:sans-serif;
     ">
@@ -23,16 +27,14 @@ def kpi_card(title, value, subtitle="", icon="📊", accent="#2563EB"):
             {icon} {title}
         </div>
 
-
         <div style="
-            font-size:34px;
+            font-size:30px;
             font-weight:700;
             color:#FFFFFF;
-            margin-top:15px;
+            margin-top:14px;
         ">
             {value}
         </div>
-
 
         <div style="
             font-size:13px;
@@ -48,10 +50,13 @@ def kpi_card(title, value, subtitle="", icon="📊", accent="#2563EB"):
     st.markdown(html, unsafe_allow_html=True)
 
 
+# ==========================================================
+# KPI ROW
+# ==========================================================
+
 def render_kpis(kpis):
 
     c1, c2, c3, c4, c5, c6, c7, c8 = st.columns(8)
-
 
     with c1:
         kpi_card(
@@ -62,7 +67,6 @@ def render_kpis(kpis):
             "#2563EB",
         )
 
-
     with c2:
         kpi_card(
             "Paid",
@@ -71,7 +75,6 @@ def render_kpis(kpis):
             "✅",
             "#22C55E",
         )
-
 
     with c3:
         kpi_card(
@@ -82,7 +85,6 @@ def render_kpis(kpis):
             "#F59E0B",
         )
 
-
     with c4:
         kpi_card(
             "Customers",
@@ -91,7 +93,6 @@ def render_kpis(kpis):
             "🏢",
             "#8B5CF6",
         )
-
 
     with c5:
         kpi_card(
@@ -102,7 +103,6 @@ def render_kpis(kpis):
             "#0EA5E9",
         )
 
-
     with c6:
         kpi_card(
             "Overdue",
@@ -111,20 +111,21 @@ def render_kpis(kpis):
             "🚨",
             "#EF4444",
         )
+
     with c7:
         kpi_card(
             "Draft",
             f'{kpis["draft"]:,}',
-            "Draft invoices",
+            "Draft Invoices",
             "📝",
             "#64748B",
         )
-    
+
     with c8:
         kpi_card(
             "Void",
             f'{kpis["void"]:,}',
-            "Void invoices",
+            "Void Invoices",
             "❌",
             "#6B7280",
         )
